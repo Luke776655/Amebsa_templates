@@ -5,6 +5,8 @@
 #include <cmath>
 #include <stdexcept>
 
+using namespace std;
+
 // w tym pliku są wzory funkcji które chcemy zminimalizować
 
 // to jest ogólna postać tej klasy, tylko określa interfejs, tzn, że wszystkie one muszą mieć operator()(), tzn. żeby można było ją wywołać pisząc po nazwie zmiennej tylko nawiasy.
@@ -28,8 +30,8 @@ struct Parabola1D : public FunctionToMinimize<ReturnType,ArgumentType> {
 
 // parabola N-wymiarowa
 template<typename ReturnType, typename ArgumentType>
-struct ParabolaND : public FunctionToMinimize<ReturnType,std::vector<ArgumentType>> {
-	ReturnType operator()(const std::vector<ArgumentType>& xx) const {
+struct ParabolaND : public FunctionToMinimize<ReturnType,vector<ArgumentType>> {
+	ReturnType operator()(const vector<ArgumentType>& xx) const {
 		ReturnType ret=0;
 		for(const auto& x : xx) ret+=x*x;
 		return ret;
@@ -38,15 +40,13 @@ struct ParabolaND : public FunctionToMinimize<ReturnType,std::vector<ArgumentTyp
 
 // parabola N-wymiarowa zamieszana z cosinuesem.
 template<typename ReturnType, typename ArgumentType>
-struct ParabolaCosND : public FunctionToMinimize<ReturnType,std::vector<ArgumentType>> {
-	ReturnType operator()(const std::vector<ArgumentType>& xx) const {
+struct ParabolaCosND : public FunctionToMinimize<ReturnType,vector<ArgumentType>> {
+	ReturnType operator()(const vector<ArgumentType>& xx) const {
 		ReturnType ret=0;
-		for(const auto& x : xx) ret+=x*x - 10*std::cos(x);
+		for(const auto& x : xx) ret+=x*x - 10*cos(x);
 		return ret;
 	};
 };
-
-using namespace std;
 
 // ferromagnetyk N-wymiarowy
 template<typename ReturnType, typename ArgumentType>

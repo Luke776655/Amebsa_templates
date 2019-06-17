@@ -74,13 +74,13 @@ class Amebsa : public FindMinimum<FunctionToMinimizeType>
 		:FindMinimum<FunctionToMinimizeType>(function_to_minimize)
 		{	};
 		ret_type findMinimum(vector <arg_type> &pt);
-		vector <double> temperature = {1, 1e-10, 0};
+		vector <ret_type> temperature = {1, 1e-10, 0};
 		ret_type fmin = numeric_limits<ret_type>::max();
 		vector <arg_type> pmin;
 		int NMAX = 10000000; //maximum allowed number of function evaluations
 		int delta = 1; //displacement
-		double ftol = 1e-16; //fractional convergence tolerance
-		double TINY = 1e-7; //tiny value preventing from dividing by 0
+		ret_type ftol = 1e-16; //fractional convergence tolerance
+		ret_type TINY = 1e-7; //tiny value preventing from dividing by 0
 		bool arrows_table_printing = false;
 		bool show_iter_output = true;
 		int iter_period = 1000;
@@ -202,7 +202,7 @@ template<class FunctionToMinimizeType, class arg_type, class ret_type> void Ameb
 		pmin[i] = q[0][i];
 	}
 	fmin=k[0];
-	printf("\nIteration %d\tTemperature %g\n", iter, -tt);
+	cout<<"\nIteration "<<iter<<"\tTemperature "<<-tt<<endl;
 	if(arrows_table_printing == true)
 	{
 		print_table(pmin);
@@ -210,7 +210,7 @@ template<class FunctionToMinimizeType, class arg_type, class ret_type> void Ameb
 	}
 	else
 		print_array(pmin);
-	printf("Energy of the system %g\n\n", fmin);
+	cout<<"Energy of the system "<<fmin<<endl<<endl;
 }
 
 template<class FunctionToMinimizeType, class arg_type, class ret_type> vector <arg_type> Amebsa<FunctionToMinimizeType, arg_type, ret_type>::get_psum()

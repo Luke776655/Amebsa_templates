@@ -99,6 +99,8 @@ void metropolis_ferromagnetyk(int steps, std::vector<Real> temps, int printEvery
 	printSpins(ferroSpins , ferromagnet_ND(ferroSpins) , 1);
 }
 
+using namespace std;
+
 template <typename T> vector <T> create_random_2PI_table(int n)
 {
 	/*
@@ -114,36 +116,48 @@ template <typename T> vector <T> create_random_2PI_table(int n)
 	return tab;
 }
 
-template <typename T> vector <T> create_random_table(int n)
+void amebsa_parabola_ND(int n, int steps, int printEveryNth)
 {
-	/*
-	creating a starting point of the system:
-	n-dimentional table with random values
-	*/
-	vector <T> tab(n);
-	for(int i = 0; i<n; i++)
-	{
-		tab[i] = rand()%1024;
-	}
-	return tab;
+    ParabolaND<double, double> parabola_ND;
+    Amebsa<ParabolaND<double, double>, double, double> a ( parabola_ND );
+    vector<double> v = create_random_2PI_table<double>(n);
+    a.NMAX = steps;
+    a.temperature = {0};
+    a.iter_period = printEveryNth;
+    a.findMinimum(v);
 }
 
-int main() {
-	//int steps=500000;
-	/*int steps=100;
-	int printEveryNth=20;
-	Real temperature=0.000001;//1000;//0.0001;
+void amebsa_parabola_cos_ND(int n, int steps, int printEveryNth)
+{
+    ParabolaCosND<double, double> parabola_cos_ND;
+    Amebsa<ParabolaCosND<double, double>, double, double> a ( parabola_cos_ND );
+    vector<double> v = create_random_2PI_table<double>(n);
+    a.NMAX = steps;
+    a.temperature = {0};
+    a.iter_period = printEveryNth;
+    a.findMinimum(v);
+}
 
-	metropolis_parabola1D(steps,temperature);
-	metropolis_parabolaND(steps,temperature);
-	//steps=500000;
-	//printEveryNth=1000;
-	metropolis_ferromagnetyk(steps , {100.,50.,10.,1.,0.1,0.01} , printEveryNth );*/
-
-    FerromagnetND<double, double> ferromagnet_ND;
-    Amebsa<FerromagnetND<double, double>, double, double> a ( ferromagnet_ND );
-    vector<double> v = create_random_2PI_table<double>(400);
+void amebsa_ferromagnetyk(int n, int steps, int printEveryNth, vector<Real> temps)
+{
+    FerromagnetND<Real, Real> ferromagnet_ND;
+    Amebsa<FerromagnetND<Real, Real>, Real, Real> a ( ferromagnet_ND );
+    vector<Real> v = create_random_2PI_table<Real>(n);
+    a.NMAX = steps;
+    a.temperature = temps;
+    a.iter_period = printEveryNth;
     a.arrows_table_printing = true;
     a.findMinimum(v);
+}
+
+int main()
+{
+    int n = 400;
+	int steps=10000000;
+	int printEveryNth=1000;
+    //amebsa_parabola_ND(n, steps, printEveryNth);
+    //amebsa_parabola_cos_ND(n, steps, printEveryNth);
+	amebsa_ferromagnetyk(n, steps, printEveryNth, {1, 1e-10, 0});
+    return 0;
 }
 
